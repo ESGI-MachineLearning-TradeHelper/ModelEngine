@@ -41,10 +41,25 @@ def load_images_from_directory(label, path, x_train_list, y_train_list):
         y_train_list.append(label)
 
 
+
+
+def load_set_from_directory(train_path, x_train_list, y_train_list):
+    load_images_from_directory(np.array([1, 0, 0]), f'{train_path}ClassD/', x_train_list, y_train_list)
+    load_images_from_directory(np.array([0, 1, 0]), f'{train_path}ClassE/', x_train_list, y_train_list)
+    load_images_from_directory(np.array([0, 0, 1]), f'{train_path}ClassF/', x_train_list, y_train_list)
+
+
+def load_images_from_directory(label, path, x_train_list, y_train_list):
+    for img_name in listdir(path):
+        x_train_list.append(
+            np.array(Image.open(f'{path}{img_name}').convert('RGB').resize(target_size)) / 255.0)  # color
+        y_train_list.append(label)
+
+
 def create_model():
     m = keras.models.Sequential()
 
-    m.add(keras.layers.Conv2D(8, kernel_size=(3, 3), activation=keras.activations.relu, padding='same'))
+    m.add(keras.layers.Conv2D(8, kernel_size=(3, 3), activation=keras.activations.relu, padding='same', input_shape=(128, 128, 3)))
     m.add(keras.layers.MaxPool2D((2, 2)))
 
     m.add(keras.layers.Conv2D(16, kernel_size=(3, 3), activation=keras.activations.relu, padding='same'))
